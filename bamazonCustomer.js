@@ -18,8 +18,37 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    allItems();
+    routeHandling();
   });
+
+function routeHandling() {
+    inquirer
+    .prompt({
+        name: "action",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
+        "View Products for Sale",
+        "Buy an item",
+        "exit"
+        ]
+    })
+    .then(function(answer) {
+        switch (answer.action) {
+        case "View Products for Sale":
+        allItems();
+        break;
+
+        case "Buy an item":
+        firstPrompt();
+        break;
+        
+        case "exit":
+        connection.end();
+        break;
+        }
+    });
+}
 
 function firstPrompt() {
     
@@ -53,10 +82,6 @@ function firstPrompt() {
                     var quantity = res[0].stock_quantity;
                     var newTotal = quantity - answer.count;
 
-                    var price = res[0].price;
-
-                    var totalCost = answer.count * price;
-
                     if (quantity > answer.count) {
                         console.log("There is enough!");
                         connection.query(
@@ -72,9 +97,9 @@ function firstPrompt() {
                             function(error) {
                               if (error) throw err;
                               console.log("Updating inventory!");
+                              totalSales(res, answer.id, answer.count);
                             }
                           );
-                          console.log("Total cost: $" + totalCost);
                     }
                     else {
                         console.log("Insufficient quantity!");
@@ -88,6 +113,31 @@ function allItems() {
         for (var i = 0; i < res.length; i++) {
         console.log("\nID: " + res[i].item_id + "\nProduct: " + res[i].product_name + "\nPrice: $" + res[i].price + "\nStock: " + res[i].stock_quantity + "\n-----------------------------------");
         }
-        firstPrompt();
+        routeHandling();
     });
 }
+
+function totalSales(res, id, count) {
+
+    var price = res[0].price;
+    var totalCost = (count * price) + res[0].product_sales;
+
+    console.log("Total cost: $" + totalCost);
+
+    connection.query(
+      "UPDATE products SET ? WHERE ?",
+      [
+        {
+          product_sales: totalCost
+        },
+        {
+          item_id: id
+        }
+      ],
+      function(err, res) {
+        console.log(res.affectedRows + " products updated!\n");
+        routeHandling();
+
+      }
+    );
+  }
