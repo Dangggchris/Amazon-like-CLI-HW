@@ -47,12 +47,31 @@ function firstPrompt() {
               }
           }])
           .then(function(answer) {
-            var query = "SELECT * FROM products WHERE ?";
-                connection.query(query, {item_id: answer.id}, function (error,response){
+    
+                connection.query("SELECT * FROM products WHERE ?", {item_id: answer.id}, function (error,response){
         
                     var quantity = response[0].stock_quantity;
+                    var newTotal = quantity - answer.count;
                     if (quantity > answer.count) {
                         console.log("There is enough!");
+                        connection.query(
+                            "UPDATE products SET ? WHERE ?",
+                            [
+                              {
+                                stock_quantity: newTotal
+                              },
+                              {
+                                item_id: answer.id
+                              }
+                            ],
+                            function(error) {
+                              if (error) throw err;
+                              console.log("Updating inventory!");
+                            }
+                          );
+                    }
+                    else {
+                        console.log("Insufficient quantity!");
                     }
                 })
           });
