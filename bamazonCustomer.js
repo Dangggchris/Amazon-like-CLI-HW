@@ -48,12 +48,12 @@ function firstPrompt() {
           }])
           .then(function(answer) {
     
-                connection.query("SELECT * FROM products WHERE ?", {item_id: answer.id}, function (error,response){
+                connection.query("SELECT * FROM products WHERE ?", {item_id: answer.id}, function (err,res){
         
-                    var quantity = response[0].stock_quantity;
+                    var quantity = res[0].stock_quantity;
                     var newTotal = quantity - answer.count;
 
-                    var price = response[0].price;
+                    var price = res[0].price;
 
                     var totalCost = answer.count * price;
 
@@ -74,7 +74,7 @@ function firstPrompt() {
                               console.log("Updating inventory!");
                             }
                           );
-                          console.log("Total cost: " + totalCost);
+                          console.log("Total cost: $" + totalCost);
                     }
                     else {
                         console.log("Insufficient quantity!");
@@ -86,7 +86,7 @@ function firstPrompt() {
 function allItems() {
     connection.query("SELECT * FROM products", function(err, res) {
         for (var i = 0; i < res.length; i++) {
-        console.log("\nProduct: " + res[i].product_name + "\nPrice: $" + res[i].price + "\nStock: " + res[i].stock_quantity + "\n-----------------------------------");
+        console.log("\nID: " + res[i].item_id + "\nProduct: " + res[i].product_name + "\nPrice: $" + res[i].price + "\nStock: " + res[i].stock_quantity + "\n-----------------------------------");
         }
         firstPrompt();
     });
