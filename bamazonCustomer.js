@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var keys = require("./keys.js");
+var table = require("table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -84,7 +85,7 @@ function firstPrompt() {
 
                     if (quantity > answer.count) {
                         console.log("There is enough!");
-                        connection.query(
+                        connection.query( 
                             "UPDATE products SET ? WHERE ?",
                             [
                               {
@@ -110,9 +111,7 @@ function firstPrompt() {
 
 function allItems() {
     connection.query("SELECT * FROM products", function(err, res) {
-        for (var i = 0; i < res.length; i++) {
-        console.log("\nID: " + res[i].item_id + "\nProduct: " + res[i].product_name + "\nPrice: $" + res[i].price + "\nStock: " + res[i].stock_quantity + "\n-----------------------------------");
-        }
+        console.table(res);
         routeHandling();
     });
 }

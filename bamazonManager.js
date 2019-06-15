@@ -63,9 +63,7 @@ function routeHandling() {
 // View all items 
 function allItems() {
     connection.query("SELECT * FROM products", function(err, res) {
-        for (var i = 0; i < res.length; i++) {
-        console.log("\ID: " + res[i].item_id + "\nProduct: " + res[i].product_name + "\nPrice: $" + res[i].price + "\nStock: " + res[i].stock_quantity + "\n-----------------------------------");
-        }
+        console.table(res);
         routeHandling();
     });
 }
@@ -182,10 +180,10 @@ function addProduct() {
   ])
   .then(answers => {
     connection.query(
-        "SELECT * FROM products WHERE EXISTS (SELECT * FROM products WHERE ?)", {item_id: answers.id},
+        "SELECT * FROM products WHERE ?", {item_id: parseInt(answers.id)},
         function(err, res) {
-            if(res) {
-                
+            if(res[0]) {
+                console.log(res);
                 console.log("ID already exists!");
                 routeHandling();
             }

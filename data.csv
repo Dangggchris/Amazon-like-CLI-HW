@@ -1,10 +1,13 @@
-1,Apple,Produce,.85,100
-2,Orange,Produce,.75,100
-3,Hennesy,Liquor,44.99,20
-4,Vodka,Liquor,29.99,45
-5,Captain Crunch,Cereal,3.95,80
-6,Special K,Cereal,4.25,75
-7,Toothbrush,Health,75,10
-8,TV,Electronics,395,5
-9,Macbook,Electronics,1400.99,15
-10,Couch,Furniture,600,25
+1,Apple,Produce,.85,10000
+2,Orange,Produce,.75,10000
+3,Hennesy,Liquor,44.99,500
+4,Vodka,Liquor,29.99,450
+5,Captain Crunch,Cereal,3.95,800
+6,Special K,Cereal,4.25,900
+7,Toothbrush,Health,75,4500
+8,TV,Electronics,395,100
+9,Macbook,Electronics,1400.99,150
+10,Couch,Furniture,600,75
+11,1.5 Carat Diamond Ring,Jewelry,15000,3
+12,24k Gold Plated Glasses, Jewelry, 8000,4
+
